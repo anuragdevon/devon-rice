@@ -1,0 +1,104 @@
+configuration {
+    scroll-method: 1;
+    scrollbar: false;
+    show-icons: true;
+    display-run: "Run ";
+    display-drun: "Open ";
+    display-emoji: "Emoji ";
+    drun-display-format: "{name}";
+    modi: "run,drun,emoji";
+}
+
+@import "~/.config/colors/colors.rasi"
+
+* {
+    font: "FiraCode Nerd Font 14";
+    background-color: transparent;
+    text-color: @foreground;
+}
+
+window {
+    background-color: rgba(30, 30, 46, 0.85);
+    border: 2px solid;
+    border-color: @bordercolor;
+    border-radius: 20px;
+    width: 520px;
+    padding: 20px;
+    x-offset: 0;
+    y-offset: -200;
+    location: center;
+    anchor: center;
+}
+
+mainbox {
+    background-color: transparent;
+    children: [inputbar, listview];
+    spacing: 16px;
+}
+
+inputbar {
+    background-color: rgba(49, 50, 68, 0.6);
+    border-radius: 12px;
+    padding: 12px 16px;
+    children: [prompt, entry];
+    spacing: 10px;
+    border: 0;
+}
+
+prompt {
+    background-color: transparent;
+    text-color: @bordercolor;
+    font: "FiraCode Nerd Font Bold 16";
+}
+
+entry {
+    background-color: transparent;
+    text-color: @foreground;
+    placeholder: "Search apps...";
+    placeholder-color: @foreground;
+}
+
+listview {
+    background-color: transparent;
+    lines: 6;
+    columns: 1;
+    spacing: 4px;
+    fixed-height: false;
+    border: 0;
+}
+
+element {
+    background-color: transparent;
+    border-radius: 10px;
+    padding: 10px 14px;
+    spacing: 12px;
+    children: [element-icon, element-text];
+}
+
+element.normal.normal {
+    background-color: transparent;
+    text-color: @foreground;
+}
+
+element.selected.normal {
+    background-color: rgba(137, 180, 250, 0.2);
+    text-color: @foreground;
+    border: 1px solid;
+    border-color: @bordercolor;
+}
+
+element.alternate.normal {
+    background-color: transparent;
+    text-color: @foreground;
+}
+
+element-icon {
+    background-color: transparent;
+    size: 36px;
+}
+
+element-text {
+    background-color: transparent;
+    text-color: inherit;
+    vertical-align: 0.5;
+}
