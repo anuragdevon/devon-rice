@@ -37,7 +37,7 @@ My personal Arch Linux + Hyprland rice. Catppuccin Mocha throughout, i3-style ke
 git clone https://github.com/anuragdevon/devon-rice ~/devon-rice
 
 # 2. Install dependencies
-yay -S hyprland ghostty waybar rofi-wayland swaync wlogout hyprlock hyprpaper \
+yay -S hyprland ghostty waybar rofi-wayland rofi-calc swaync wlogout hyprlock hyprpaper \
        cava starship zsh-autosuggestions zsh-syntax-highlighting \
        ttf-firacode-nerd papirus-icon-theme noto-fonts-emoji \
        gnome-keyring libsecret neovim yazi
@@ -68,6 +68,7 @@ hyprctl reload
 | `Super + L` | Lock screen (hyprlock) |
 | `Super + N` | Notification center (swaync) |
 | `Super + C` | Audio visualizer (cava) |
+| `Super + =` | Calculator (rofi-calc) |
 | `Super + S` | Scratchpad toggle |
 | `Super + Shift + E` | Power menu (wlogout) |
 | `Super + Shift + R` | Reload Hyprland config |
