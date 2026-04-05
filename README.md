@@ -70,7 +70,8 @@ hyprctl reload
 | `Super + N` | Notification center (swaync) |
 | `Super + C` | Audio visualizer (cava) |
 | `Super + =` | Calculator (rofi-calc) |
-| `Super + B` | Bluetooth manager (bluetuith) |
+| `Super + B` | Bluetooth (bluetoothctl) |
+| `Super + Shift + A` | Toggle audio output (HDMI ↔ Bluetooth) |
 | `Super + S` | Scratchpad toggle |
 | `Super + Shift + E` | Power menu (wlogout) |
 | `Super + Shift + R` | Reload Hyprland config |

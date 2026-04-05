@@ -19,7 +19,7 @@ A complete Hyprland desktop with:
 - **Catppuccin Mocha** color scheme throughout — every component shares the same color palette
 - **i3-style keybindings** — if you're migrating from i3, your muscle memory works immediately
 - **Dual monitor support** — laptop screen (1.5x HiDPI) + external monitor (1.0x) configured correctly
-- **A full productivity stack** — launcher, status bar, notifications, lock screen, file manager, calculator, bluetooth — all wired up
+- **A full productivity stack** — launcher, status bar, notifications, lock screen, file manager, calculator, bluetooth, audio toggle — all wired up
 
 ---
 
@@ -53,6 +53,7 @@ A complete Hyprland desktop with:
 | Audio visualizer | Cava |
 | Calculator | rofi-calc (python3 script) |
 | Bluetooth | Bluetoothctl |
+| Audio toggle | toggle-audio.sh (HDMI ↔ Bluetooth) |
 | Login manager | SDDM (catppuccin-mocha-blue) |
 | Font | FiraCode Nerd Font |
 | Color scheme | Catppuccin Mocha |
@@ -183,6 +184,7 @@ I came from i3wm, so I mapped everything to match. The full bindings are in `hyp
 | `Super + N` | Notification center |
 | `Super + C` | Audio visualizer (Cava) |
 | `Super + =` | Calculator |
+| `Super + Shift + A` | Toggle audio (HDMI ↔ Bluetooth) |
 | `Super + Shift + E` | Power menu |
 | `Super + Shift + R` | Reload config |
 | `Super + hjkl` | Focus window (vim-style) |
@@ -251,6 +253,45 @@ selected=$(echo "$result" | rofi -dmenu -p "  $expr =" -l 1 \
 Supports `sqrt(144)`, `sin(pi/2)`, `15% * 200` — full Python math. Result is copied to clipboard on select.
 
 <!-- ADD: Calculator screenshot -->
+
+### Bluetooth
+
+`Super + B` opens a floating Ghostty window running `bluetoothctl`. No extra packages needed — it's part of `bluez`.
+
+```bash
+# First time pairing
+power on
+scan on          # wait ~5s
+pair XX:XX:XX    # tab-complete works
+connect XX:XX:XX
+scan off
+exit
+
+# Every time after
+connect XX:XX:XX
+```
+
+### Audio Toggle (HDMI ↔ Bluetooth)
+
+`Super + Shift + A` switches your default audio sink and fires a swaync notification confirming which is active. No fumbling with pavucontrol.
+
+```bash
+#!/bin/bash
+HDMI="alsa_output.pci-0000_03_00.1.hdmi-stereo"
+BT="bluez_output.XX:XX:XX:XX:XX:XX"   # your BT device MAC
+
+current=$(pactl get-default-sink)
+
+if [ "$current" = "$HDMI" ]; then
+    pactl set-default-sink "$BT"
+    notify-send -i audio-headphones "Audio → Bluetooth" "Switched to Bluetooth headphones"
+else
+    pactl set-default-sink "$HDMI"
+    notify-send -i audio-card "Audio → Monitor" "Switched to HDMI monitor"
+fi
+```
+
+> Update the `BT` variable with your device's MAC address from `pactl list sinks short`.
 
 ### Hyprlock — Lock Screen
 
