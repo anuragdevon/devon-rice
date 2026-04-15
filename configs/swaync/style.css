@@ -2,8 +2,8 @@
 
 * {
     outline: none;
-    font-family: "Segoe UI Variable Static Text";
-    font-size: 18px;
+    font-family: "FiraCode Nerd Font";
+    font-size: 14px;
     text-shadow: none;
     color: @foreground;
     background-color: transparent;

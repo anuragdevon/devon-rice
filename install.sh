@@ -49,18 +49,24 @@ mkdir -p \
     "$HOME/.config/cava" \
     "$HOME/.config/colors" \
     "$HOME/.config/starship" \
-    "$HOME/.config/yazi"
+    "$HOME/.config/yazi" \
+    "$HOME/.config/gtk-3.0" \
+    "$HOME/.config/gtk-4.0"
 
 echo ""
 echo "Linking hypr..."
-do_link "$REPO/hypr/hyprland.conf"    "$HOME/.config/hypr/hyprland.conf"
-do_link "$REPO/hypr/hyprlock.conf"    "$HOME/.config/hypr/hyprlock.conf"
-do_link "$REPO/hypr/set-wallpaper.sh" "$HOME/.config/hypr/set-wallpaper.sh"
+do_link "$REPO/hypr/hyprland.conf"        "$HOME/.config/hypr/hyprland.conf"
+do_link "$REPO/hypr/hyprlock.conf"        "$HOME/.config/hypr/hyprlock.conf"
+do_link "$REPO/hypr/set-wallpaper.sh"     "$HOME/.config/hypr/set-wallpaper.sh"
+do_link "$REPO/hypr/workspace-labels.sh"  "$HOME/.config/hypr/workspace-labels.sh"
 chmod +x "$REPO/hypr/set-wallpaper.sh"
+chmod +x "$REPO/hypr/workspace-labels.sh"
 
 echo "Linking waybar..."
 do_link "$REPO/waybar/config.jsonc" "$HOME/.config/waybar/config.jsonc"
 do_link "$REPO/waybar/style.css"    "$HOME/.config/waybar/style.css"
+do_link "$REPO/waybar/media.sh"     "$HOME/.config/waybar/media.sh"
+chmod +x "$REPO/waybar/media.sh"
 
 echo "Linking rofi..."
 do_link "$REPO/rofi/config.rasi" "$HOME/.config/rofi/config.rasi"
@@ -96,11 +102,20 @@ do_link "$REPO/starship/starship.toml" "$HOME/.config/starship/starship.toml"
 
 echo "Linking yazi..."
 do_link "$REPO/yazi/keymap.toml" "$HOME/.config/yazi/keymap.toml"
+do_link "$REPO/yazi/theme.toml"  "$HOME/.config/yazi/theme.toml"
+do_link "$REPO/yazi/yazi.toml"   "$HOME/.config/yazi/yazi.toml"
+
+echo "Linking gtk..."
+do_link "$REPO/gtk-3.0/settings.ini" "$HOME/.config/gtk-3.0/settings.ini"
+do_link "$REPO/gtk-4.0/settings.ini" "$HOME/.config/gtk-4.0/settings.ini"
 
 echo ""
 echo "Done! All symlinks created."
 echo ""
 echo "NOTE: Update hyprpaper.conf and set-wallpaper.sh with your actual username/wallpaper paths."
+echo "NOTE: Symlink GTK4 Catppuccin CSS after installing catppuccin-gtk-theme-mocha:"
+echo "      ln -sf /usr/share/themes/catppuccin-mocha-blue-standard+default/gtk-4.0/gtk.css ~/.config/gtk-4.0/gtk.css"
+echo "      ln -sf /usr/share/themes/catppuccin-mocha-blue-standard+default/gtk-4.0/gtk-dark.css ~/.config/gtk-4.0/gtk-dark.css"
 echo "NOTE: Reload Hyprland: hyprctl reload"
 if [[ "$BACKUP" =~ ^[Yy]$ ]] && [ -d "$BACKUP_DIR" ]; then
     echo "NOTE: Original configs backed up to $BACKUP_DIR"

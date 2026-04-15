@@ -14,7 +14,7 @@ My personal Arch Linux + Hyprland rice. Catppuccin Mocha throughout, i3-style ke
 | Terminal | Ghostty |
 | Shell | Zsh + Starship |
 | Editor | Neovim |
-| File manager | Yazi |
+| File manager | Nautilus (GTK4, Catppuccin themed) |
 | Browser | Brave |
 | Launcher | Rofi (spotlight style) |
 | Status bar | Waybar |
@@ -24,8 +24,11 @@ My personal Arch Linux + Hyprland rice. Catppuccin Mocha throughout, i3-style ke
 | Login manager | SDDM (catppuccin-mocha-blue) |
 | Wallpaper | Hyprpaper |
 | Visualizer | Cava |
+| Clipboard | Cliphist + wl-clipboard |
 | Color scheme | Catppuccin Mocha |
 | Font | FiraCode Nerd Font |
+| Icons | Papirus-Dark |
+| Cursor | Bibata Modern Classic |
 | AUR helper | yay |
 
 ---
@@ -39,19 +42,30 @@ git clone https://github.com/anuragdevon/devon-rice ~/devon-rice
 # 2. Install dependencies
 yay -S hyprland ghostty waybar rofi-wayland swaync wlogout hyprlock hyprpaper \
        cava starship zsh-autosuggestions zsh-syntax-highlighting \
-       ttf-firacode-nerd papirus-icon-theme noto-fonts-emoji \
-       gnome-keyring libsecret neovim yazi wl-clipboard \
+       ttf-firacode-nerd papirus-icon-theme bibata-cursor-theme noto-fonts-emoji \
+       gnome-keyring libsecret neovim nautilus \
+       catppuccin-gtk-theme-mocha kvantum qt6ct \
+       cliphist wl-clipboard playerctl \
+       grim slurp socat jq \
        bluez bluez-utils bluetuith
 
-# 3. Run the installer (creates symlinks, optionally backs up existing configs)
+# 3. Run the installer
 cd ~/devon-rice
 bash install.sh
 
-# 4. Edit paths in two files for your username
-nvim configs/hyprpaper/hyprpaper.conf   # change /home/anurag/ to your username
-nvim configs/hypr/set-wallpaper.sh      # same
+# 4. Symlink GTK4 CSS for Nautilus
+ln -sf /usr/share/themes/catppuccin-mocha-blue-standard+default/gtk-4.0/gtk.css ~/.config/gtk-4.0/gtk.css
+ln -sf /usr/share/themes/catppuccin-mocha-blue-standard+default/gtk-4.0/gtk-dark.css ~/.config/gtk-4.0/gtk-dark.css
 
-# 5. Reload or re-login
+# 5. Set up hyprexpo plugin
+hyprpm add https://github.com/hyprwm/hyprland-plugins
+hyprpm enable hyprexpo
+
+# 6. Edit paths for your username
+nvim configs/hyprpaper/hyprpaper.conf
+nvim configs/hypr/set-wallpaper.sh
+
+# 7. Reload
 hyprctl reload
 ```
 
@@ -64,11 +78,15 @@ hyprctl reload
 | `Super + Enter` | Open terminal (ghostty) |
 | `Super + Q` | Close window |
 | `Super + D` | App launcher (rofi) |
-| `Super + E` | File manager (yazi) |
+| `Super + E` | File manager (nautilus) |
 | `Super + F` | Fullscreen toggle |
 | `Super + L` | Lock screen (hyprlock) |
 | `Super + N` | Notification center (swaync) |
 | `Super + C` | Audio visualizer (cava) |
+| `Super + Tab` | Workspace overview (hyprexpo) |
+| `Super + V` | Layout split toggle |
+| `Super + Shift + V` | Clipboard history (cliphist) |
+| `Super + Shift + S` | Screenshot region → clipboard |
 | `Super + =` | Calculator (rofi-calc) |
 | `Super + B` | Bluetooth (bluetoothctl) |
 | `Super + Shift + A` | Toggle audio output (HDMI ↔ Bluetooth) |
@@ -86,40 +104,56 @@ hyprctl reload
 | `Super + Shift + ,` | Move window to left monitor |
 | `Super + Shift + .` | Move window to right monitor |
 | `Super + mouse scroll` | Cycle workspaces |
+| `Super + RMB drag` | Resize window (mouse) |
+| `Super + LMB drag` | Move window (mouse) |
+
+---
+
+## Workspace Layout
+
+| Workspace | Label | Use |
+|-----------|-------|-----|
+| 1 |  Brave | Browser |
+| 2 |  Code | Editor / IDE |
+| 3 |  Term | Terminal |
+| 4 |  Music | Spotify / audio |
+| 5 | 󰃽 Edit | Video editing |
+| 6 | 󰙯 Discord | Chat |
+| 7 |  Games | Gaming |
+| 8 |  Tools | System tools |
+| 9 |  Videos | Media playback |
+| 0 |  Buffer | Scratch / overflow |
 
 ---
 
 ## Monitor Setup
 
-Configured for a dual-monitor setup:
-
 ```ini
-monitor = eDP-1,  1920x1080@60, 0x0,    1.5   # 15" built-in laptop screen
-monitor = HDMI-A-1, 1920x1080@60, 1280x0, 1.0   # 21" external monitor
+monitor = eDP-1,    1920x1080@60, 0x0,    1.5   # 15" built-in laptop
+monitor = HDMI-A-1, 1920x1080@60, 1280x0, 1.0   # 21" external
 ```
 
-Single-monitor users: remove the `HDMI-A-1` line and the monitor focus/move binds.
+Single-monitor: remove the `HDMI-A-1` line and the monitor focus/move binds.
 
 ---
 
 ## Wallpaper Note
 
-Hyprpaper does **not** expand `~/`. Always use full paths in `configs/hyprpaper/hyprpaper.conf` and `configs/hypr/set-wallpaper.sh`:
+Hyprpaper does **not** expand `~/`. Always use full paths:
 
 ```ini
-# hyprpaper.conf
 preload = /home/YOUR_USERNAME/wallpapers/1.jpg
 wallpaper = eDP-1,/home/YOUR_USERNAME/wallpapers/1.jpg
 wallpaper = HDMI-A-1,/home/YOUR_USERNAME/wallpapers/1.jpg
 ```
 
-Put your wallpapers in `~/wallpapers/`.
+Put wallpapers in `~/wallpapers/`.
 
 ---
 
 ## Color Scheme
 
-Catppuccin Mocha. Shared color definitions live in `configs/colors/` — both `.rasi` (for rofi) and `.css` (for waybar, wlogout, swaync) import from here.
+Catppuccin Mocha. Shared definitions in `configs/colors/` — imported by waybar, swaync, rofi, wlogout.
 
 | Role | Hex |
 |------|-----|
@@ -131,12 +165,14 @@ Catppuccin Mocha. Shared color definitions live in `configs/colors/` — both `.
 | Yellow | `#f9e2af` |
 | Orange | `#fab387` |
 | Purple | `#cba6f7` |
+| Gray | `#313244` |
+| Surface | `#181825` |
 
 ---
 
 ## How Symlinks Work
 
-`install.sh` creates symlinks from `~/.config/<app>/` pointing into this repo. This means editing a file anywhere (in the repo or via `nvim ~/.config/hypr/hyprland.conf`) edits the same file — changes are always reflected in the repo immediately, ready to commit and push.
+`install.sh` creates symlinks from `~/.config/<app>/` into this repo. Editing a config anywhere edits the same file — changes are always in the repo ready to commit.
 
 ```
 ~/.config/hypr/hyprland.conf  →  ~/devon-rice/configs/hypr/hyprland.conf
@@ -152,35 +188,43 @@ Catppuccin Mocha. Shared color definitions live in `configs/colors/` — both `.
 devon-rice/
 ├── configs/
 │   ├── hypr/
-│   │   ├── hyprland.conf       # Main WM config
-│   │   ├── hyprlock.conf       # Lock screen config
-│   │   └── set-wallpaper.sh    # Wallpaper init script
+│   │   ├── hyprland.conf           # Main WM config
+│   │   ├── hyprlock.conf           # Lock screen
+│   │   ├── set-wallpaper.sh        # Wallpaper init
+│   │   └── workspace-labels.sh     # Dynamic workspace naming (optional daemon)
 │   ├── waybar/
-│   │   ├── config.jsonc        # Bar layout
-│   │   └── style.css           # Bar styling
+│   │   ├── config.jsonc            # Bar layout
+│   │   ├── style.css               # Bar styling
+│   │   └── media.sh                # Playerctl media script
 │   ├── rofi/
-│   │   └── config.rasi         # Launcher (spotlight style)
+│   │   └── config.rasi
 │   ├── ghostty/
-│   │   └── config              # Terminal config
+│   │   └── config
 │   ├── swaync/
-│   │   ├── config.json         # Notification center
+│   │   ├── config.json
 │   │   └── style.css
 │   ├── wlogout/
-│   │   ├── layout              # Power menu layout
-│   │   ├── style.css           # Power menu style
-│   │   └── icons/              # Button icons
+│   │   ├── layout
+│   │   ├── style.css
+│   │   └── icons/
 │   ├── hyprpaper/
-│   │   └── hyprpaper.conf      # Wallpaper config
+│   │   └── hyprpaper.conf
 │   ├── cava/
-│   │   └── config              # Audio visualizer
+│   │   └── config
 │   ├── colors/
-│   │   ├── colors.css          # Shared colors (CSS)
-│   │   └── colors.rasi         # Shared colors (Rofi)
+│   │   ├── colors.css              # Shared colors (CSS)
+│   │   └── colors.rasi             # Shared colors (Rofi)
 │   ├── starship/
-│   │   └── starship.toml       # Prompt config
-│   └── yazi/
-│       └── keymap.toml         # File manager keymaps
-├── install.sh                  # Symlink installer
+│   │   └── starship.toml
+│   ├── yazi/
+│   │   ├── keymap.toml
+│   │   ├── theme.toml              # Catppuccin Mocha theme
+│   │   └── yazi.toml               # General settings + nvim opener
+│   ├── gtk-3.0/
+│   │   └── settings.ini            # GTK3 theme
+│   └── gtk-4.0/
+│       └── settings.ini            # GTK4 theme (Nautilus)
+├── install.sh
 └── README.md
 ```
 
@@ -188,4 +232,4 @@ devon-rice/
 
 ## Credits
 
-Visual inspiration from [ViegPhunt/Dotfiles](https://github.com/ViegPhunt/Dotfiles). Previous i3 rice at [anuragdevon/archrice](https://github.com/anuragdevon/archrice).
+Visual inspiration from [ViegPhunt/Dotfiles](https://github.com/ViegPhunt/Dotfiles) and [end-4/dots-hyprland](https://github.com/end-4/dots-hyprland). Previous i3 rice at [anuragdevon/archrice](https://github.com/anuragdevon/archrice).

@@ -1,0 +1,124 @@
+# Catppuccin Mocha theme for Yazi
+
+[flavor]
+use = "catppuccin-mocha"
+
+[manager]
+cwd = { fg = "#89b4fa" }
+
+# Hovered
+hovered         = { fg = "#1e1e2e", bg = "#89b4fa" }
+preview_hovered = { underline = true }
+
+# Find
+find_keyword  = { fg = "#f9e2af", bold = true, italic = true, underline = true }
+find_position = { fg = "#fab387", bg = "reset", bold = true, italic = true }
+
+# Marker
+marker_copied   = { fg = "#a6e3a1", bg = "#a6e3a1" }
+marker_cut      = { fg = "#f38ba8", bg = "#f38ba8" }
+marker_marked   = { fg = "#cba6f7", bg = "#cba6f7" }
+marker_selected = { fg = "#89b4fa", bg = "#89b4fa" }
+
+# Tab
+tab_active   = { fg = "#1e1e2e", bg = "#89b4fa" }
+tab_inactive = { fg = "#cdd6f4", bg = "#313244" }
+tab_width    = 1
+
+# Count
+count_copied   = { fg = "#1e1e2e", bg = "#a6e3a1" }
+count_cut      = { fg = "#1e1e2e", bg = "#f38ba8" }
+count_selected = { fg = "#1e1e2e", bg = "#89b4fa" }
+
+# Border
+border_symbol = "│"
+border_style  = { fg = "#45475a" }
+
+# Highlighting
+syntect_theme = "base16-ocean.dark"
+
+[status]
+separator_open  = ""
+separator_close = ""
+separator_style = { fg = "#313244", bg = "#313244" }
+
+# Mode
+mode_normal = { fg = "#1e1e2e", bg = "#89b4fa", bold = true }
+mode_select = { fg = "#1e1e2e", bg = "#a6e3a1", bold = true }
+mode_unset  = { fg = "#1e1e2e", bg = "#f38ba8", bold = true }
+
+# Progress
+progress_label  = { fg = "#cdd6f4", bold = true }
+progress_normal = { fg = "#89b4fa", bg = "#313244" }
+progress_error  = { fg = "#f38ba8", bg = "#313244" }
+
+# Permissions
+perm_type  = { fg = "#89b4fa" }
+perm_read  = { fg = "#f9e2af" }
+perm_write = { fg = "#f38ba8" }
+perm_exec  = { fg = "#a6e3a1" }
+perm_sep   = { fg = "#45475a" }
+
+[input]
+border   = { fg = "#89b4fa" }
+title    = { fg = "#89b4fa" }
+value    = { fg = "#cdd6f4" }
+selected = { reversed = true }
+
+[completion]
+border   = { fg = "#89b4fa" }
+active   = { fg = "#1e1e2e", bg = "#89b4fa" }
+inactive = { fg = "#a6adc8" }
+
+[spot]
+border = { fg = "#89b4fa" }
+title  = { fg = "#89b4fa" }
+
+[notify]
+title_info  = { fg = "#a6e3a1" }
+title_warn  = { fg = "#f9e2af" }
+title_error = { fg = "#f38ba8" }
+icon_info   = ""
+icon_warn   = ""
+icon_error  = ""
+
+[pick]
+border = { fg = "#89b4fa" }
+active = { fg = "#1e1e2e", bg = "#89b4fa" }
+inactive = {}
+
+[which]
+cols            = 3
+mask            = { bg = "#1e1e2e" }
+cand            = { fg = "#89b4fa" }
+rest            = { fg = "#6c7086" }
+desc            = { fg = "#cba6f7" }
+separator       = "  "
+separator_style = { fg = "#45475a" }
+
+[filetype]
+rules = [
+    # Images
+    { mime = "image/*", fg = "#89dceb" },
+    # Videos
+    { mime = "video/*", fg = "#cba6f7" },
+    # Audio
+    { mime = "audio/*", fg = "#fab387" },
+    # Archives
+    { mime = "application/zip",              fg = "#f38ba8" },
+    { mime = "application/gzip",             fg = "#f38ba8" },
+    { mime = "application/x-tar",            fg = "#f38ba8" },
+    { mime = "application/x-bzip2",          fg = "#f38ba8" },
+    { mime = "application/x-7z-compressed",  fg = "#f38ba8" },
+    { mime = "application/x-rar",            fg = "#f38ba8" },
+    { mime = "application/xz",               fg = "#f38ba8" },
+    # Documents
+    { mime = "application/pdf",              fg = "#f9e2af" },
+    { mime = "text/*",                       fg = "#a6e3a1" },
+    # Executables
+    { mime = "application/x-executable",    fg = "#a6e3a1", bold = true },
+    { mime = "application/x-sharedlib",     fg = "#a6e3a1" },
+    # Fallback
+    { name = "*", fg = "#cdd6f4" },
+    { name = "*/", fg = "#89b4fa" },
+]
