@@ -3,32 +3,59 @@
 * {
     font-family: "FiraCode Nerd Font";
     font-size: 13px;
-    font-weight: bold;
-    background-color: transparent;
-    border-radius: 0;
+    font-weight: 500;
     min-height: 0;
-}
-
-window#waybar {
-    background: transparent;
-    color: @foreground;
-}
-
-#workspaces button {
-    color: alpha(@foreground, 0.5);
-    padding: 0 8px;
     border: none;
-    border-radius: 20px;
-    margin: 4px 2px;
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
+}
+
+/* ── Bar window ─────────────────────────────────────────────── */
+window#waybar {
+    background: rgba(30, 30, 46, 0.82);
+    color: @foreground;
+    border-radius: 14px;
+    border: 1px solid rgba(137, 180, 250, 0.10);
+}
+
+/* ── Module group pills ─────────────────────────────────────── */
+.modules-left {
+    background: rgba(17, 17, 27, 0.45);
+    border-radius: 10px;
+    margin: 5px 4px 5px 6px;
+    padding: 0 4px;
+}
+
+.modules-right {
+    background: rgba(17, 17, 27, 0.45);
+    border-radius: 10px;
+    margin: 5px 6px 5px 4px;
+    padding: 0 4px;
+}
+
+.modules-center {
+    margin: 4px 0;
+}
+
+/* ── Workspaces ─────────────────────────────────────────────── */
+#workspaces button {
+    color: rgba(205, 214, 244, 0.35);
+    font-size: 12px;
+    font-weight: bold;
+    padding: 0 10px;
+    border-radius: 10px;
+    margin: 0 2px;
     background: transparent;
-    min-width: 26px;
-    transition: all 0.2s ease;
+    min-width: 28px;
+    transition: all 0.15s ease;
 }
 
 #workspaces button.active {
     color: @background;
     background: @blue;
-    padding: 0 12px;
+    padding: 0 14px;
+    min-width: 36px;
 }
 
 #workspaces button.urgent {
@@ -41,20 +68,100 @@ window#waybar {
     background: @purple;
 }
 
+/* ── Window title ───────────────────────────────────────────── */
+#window {
+    color: rgba(205, 214, 244, 0.55);
+    font-size: 12px;
+    font-weight: normal;
+    padding: 0 12px 0 8px;
+}
+
+/* ── System modules ─────────────────────────────────────────── */
+#cpu {
+    color: @blue;
+    padding: 0 10px;
+}
+
+#memory {
+    color: @yellow;
+    padding: 0 10px;
+}
+
+#battery {
+    color: @purple;
+    padding: 0 10px;
+}
+
+#battery.charging,
+#battery.plugged {
+    color: @green;
+}
+
+#battery.warning:not(.charging) {
+    color: @orange;
+}
+
+#battery.critical:not(.charging) {
+    color: @red;
+    animation: blink 1s linear infinite;
+}
+
+@keyframes blink {
+    to { color: rgba(243, 139, 168, 0.4); }
+}
+
+/* ── Right modules ──────────────────────────────────────────── */
+#network {
+    color: @green;
+    padding: 0 10px;
+}
+
+#pulseaudio {
+    color: @orange;
+    padding: 0 10px;
+}
+
+#pulseaudio.muted {
+    color: rgba(205, 214, 244, 0.25);
+}
+
 #clock {
     color: @blue;
+    font-size: 14px;
+    font-weight: bold;
     padding: 0 12px;
 }
 
-#battery { color: @purple; padding: 0 8px; }
-#network { color: @green;  padding: 0 8px; }
-#pulseaudio { color: @orange; padding: 0 8px; }
-#cpu { color: @blue; padding: 0 8px; }
-#memory { color: @yellow; padding: 0 8px; }
-#tray { padding: 0 8px; }
+#tray {
+    padding: 0 10px 0 6px;
+}
 
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: rgba(243, 139, 168, 0.3);
+    border-radius: 6px;
+}
+
+/* ── Media ──────────────────────────────────────────────────── */
 #custom-media {
-    color: @pink;
-    padding: 0 12px;
+    color: rgba(205, 214, 244, 0.4);
     font-style: italic;
+    padding: 0 12px 0 10px;
+    font-size: 12px;
+}
+
+#custom-media.playing {
+    color: @pink;
+}
+
+#custom-media.paused {
+    color: rgba(205, 214, 244, 0.35);
+}
+
+#custom-media.empty {
+    padding: 0;
 }

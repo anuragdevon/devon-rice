@@ -89,7 +89,9 @@ hyprctl reload
 | `Super + Shift + S` | Screenshot region → clipboard |
 | `Super + =` | Calculator (rofi-calc) |
 | `Super + B` | Bluetooth (bluetoothctl) |
-| `Super + Shift + A` | Toggle audio output (HDMI ↔ Bluetooth) |
+| `Super + Shift + A` | Audio sink picker (Rofi — all devices) |
+| `Super + Shift + M` | Toggle dual monitor ↔ laptop only |
+| `Super + Shift + W` | Randomize wallpaper |
 | `Super + S` | Scratchpad toggle |
 | `Super + Shift + E` | Power menu (wlogout) |
 | `Super + Shift + R` | Reload Hyprland config |
@@ -190,12 +192,16 @@ devon-rice/
 │   ├── hypr/
 │   │   ├── hyprland.conf           # Main WM config
 │   │   ├── hyprlock.conf           # Lock screen
-│   │   ├── set-wallpaper.sh        # Wallpaper init
-│   │   └── workspace-labels.sh     # Dynamic workspace naming (optional daemon)
+│   │   ├── hypridle.conf           # Idle daemon (dim → lock → suspend)
+│   │   ├── set-wallpaper.sh        # Random wallpaper picker
+│   │   ├── toggle-audio.sh         # Rofi audio sink switcher
+│   │   ├── toggle-monitor.sh       # Dual ↔ laptop-only toggle
+│   │   ├── rofi-calc.sh            # Python calculator via Rofi
+│   │   └── workspace-labels.sh     # Dynamic workspace naming (optional)
 │   ├── waybar/
 │   │   ├── config.jsonc            # Bar layout
 │   │   ├── style.css               # Bar styling
-│   │   └── media.sh                # Playerctl media script
+│   │   └── media.sh                # Playerctl media script (JSON output)
 │   ├── rofi/
 │   │   └── config.rasi
 │   ├── ghostty/
@@ -222,8 +228,10 @@ devon-rice/
 │   │   └── yazi.toml               # General settings + nvim opener
 │   ├── gtk-3.0/
 │   │   └── settings.ini            # GTK3 theme
-│   └── gtk-4.0/
-│       └── settings.ini            # GTK4 theme (Nautilus)
+│   ├── gtk-4.0/
+│   │   └── settings.ini            # GTK4 theme (Nautilus)
+│   └── fontconfig/
+│       └── fonts.conf              # Noto Sans default, FiraCode mono
 ├── install.sh
 └── README.md
 ```

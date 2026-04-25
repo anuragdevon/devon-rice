@@ -51,15 +51,23 @@ mkdir -p \
     "$HOME/.config/starship" \
     "$HOME/.config/yazi" \
     "$HOME/.config/gtk-3.0" \
-    "$HOME/.config/gtk-4.0"
+    "$HOME/.config/gtk-4.0" \
+    "$HOME/.config/fontconfig"
 
 echo ""
 echo "Linking hypr..."
 do_link "$REPO/hypr/hyprland.conf"        "$HOME/.config/hypr/hyprland.conf"
 do_link "$REPO/hypr/hyprlock.conf"        "$HOME/.config/hypr/hyprlock.conf"
+do_link "$REPO/hypr/hypridle.conf"        "$HOME/.config/hypr/hypridle.conf"
 do_link "$REPO/hypr/set-wallpaper.sh"     "$HOME/.config/hypr/set-wallpaper.sh"
+do_link "$REPO/hypr/toggle-audio.sh"      "$HOME/.config/hypr/toggle-audio.sh"
+do_link "$REPO/hypr/toggle-monitor.sh"    "$HOME/.config/hypr/toggle-monitor.sh"
+do_link "$REPO/hypr/rofi-calc.sh"         "$HOME/.config/hypr/rofi-calc.sh"
 do_link "$REPO/hypr/workspace-labels.sh"  "$HOME/.config/hypr/workspace-labels.sh"
 chmod +x "$REPO/hypr/set-wallpaper.sh"
+chmod +x "$REPO/hypr/toggle-audio.sh"
+chmod +x "$REPO/hypr/toggle-monitor.sh"
+chmod +x "$REPO/hypr/rofi-calc.sh"
 chmod +x "$REPO/hypr/workspace-labels.sh"
 
 echo "Linking waybar..."
@@ -108,6 +116,9 @@ do_link "$REPO/yazi/yazi.toml"   "$HOME/.config/yazi/yazi.toml"
 echo "Linking gtk..."
 do_link "$REPO/gtk-3.0/settings.ini" "$HOME/.config/gtk-3.0/settings.ini"
 do_link "$REPO/gtk-4.0/settings.ini" "$HOME/.config/gtk-4.0/settings.ini"
+
+echo "Linking fontconfig..."
+do_link "$REPO/fontconfig/fonts.conf" "$HOME/.config/fontconfig/fonts.conf"
 
 echo ""
 echo "Done! All symlinks created."

@@ -1,15 +1,16 @@
 {
     "layer": "top",
     "position": "top",
-    "height": 36,
-    "spacing": 4,
-    "margin-top": 6,
-    "margin-left": 8,
-    "margin-right": 8,
+    "height": 40,
+    "spacing": 0,
+    "margin-top": 10,
+    "margin-left": 14,
+    "margin-right": 14,
+    "exclusive": true,
 
-    "modules-left": ["hyprland/workspaces", "hyprland/window"],
-    "modules-center": ["custom/media", "clock"],
-    "modules-right": ["pulseaudio", "network", "battery", "cpu", "memory", "tray"],
+    "modules-left":   ["cpu", "memory", "battery", "hyprland/window"],
+    "modules-center": ["hyprland/workspaces", "custom/media"],
+    "modules-right":  ["pulseaudio", "network", "clock", "tray"],
 
     "hyprland/workspaces": {
         "format": "{icon}",
@@ -21,7 +22,7 @@
             "3":  " Term",
             "4":  " Music",
             "5":  "󰃽 Edit",
-            "6":  "󰙯 Discord",
+            "6":  "󰙯 Chat",
             "7":  " Games",
             "8":  " Tools",
             "9":  " Videos",
@@ -32,64 +33,74 @@
     "hyprland/window": {
         "format": "{title}",
         "icon": true,
-        "icon-size": 16,
-        "max-length": 40,
-        "separate-outputs": true
+        "icon-size": 15,
+        "max-length": 30,
+        "separate-outputs": true,
+        "rewrite": {
+            ".* (—|-) Brave.*":             " Brave",
+            ".* (—|-) Thorium.*":           " Thorium",
+            ".* (—|-) Mozilla Firefox.*":   "󰈹 Firefox",
+            ".*Visual Studio Code.*":        " VS Code",
+            "NVIM?.*":                       " Neovim",
+            ".* (—|-) Discord.*":           "󰙯 Discord",
+            "Spotify.*":                     " Spotify",
+            ".* (—|-) Nautilus.*":          " Files",
+            ".*ghostty.*":                   " Terminal",
+            ".*Ghostty.*":                   " Terminal"
+        }
     },
 
     "clock": {
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format": " {:%I:%M %p}",
-        "format-alt": " {:%A, %B %d %Y}"
+        "tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>",
+        "format": " {:%H:%M}",
+        "format-alt": "󰃶 {:%a, %d %b}"
     },
 
     "cpu": {
         "format": " {usage}%",
-        "tooltip": false,
-        "interval": 2
+        "interval": 2,
+        "tooltip": false
     },
 
     "memory": {
-        "format": " {percentage}%",
+        "format": " {used:0.1f}G",
+        "tooltip-format": "{used:0.1f}G used / {total:0.1f}G total ({percentage}%)",
         "interval": 2
     },
 
     "battery": {
-        "states": {
-            "warning": 30,
-            "critical": 15
-        },
+        "states": { "warning": 30, "critical": 15 },
         "format": "{icon} {capacity}%",
-        "format-charging": " {capacity}%",
-        "format-plugged": " {capacity}%",
-        "format-icons": ["", "", "", "", ""]
+        "format-charging": "󰂄 {capacity}%",
+        "format-plugged":  "󰚥 {capacity}%",
+        "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
     },
 
     "network": {
-        "format-wifi": " {essid}",
-        "format-ethernet": " {ipaddr}",
-        "format-disconnected": "󰌙 Disconnected",
-        "tooltip-format": "{ifname}: {ipaddr}/{cidr}"
+        "format-wifi":        " {signalStrength}%",
+        "format-ethernet":    "󰈀 {ipaddr}",
+        "format-disconnected": "󰌙",
+        "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}"
     },
 
     "pulseaudio": {
         "format": "{icon} {volume}%",
-        "format-muted": "󰝟 Muted",
-        "format-icons": {
-            "default": ["", "", ""]
-        },
-        "on-click": "pavucontrol"
+        "format-muted": "󰝟",
+        "format-icons": { "default": ["󰕿", "󰖀", "󰕾"] },
+        "on-click": "pavucontrol",
+        "scroll-step": 5
     },
 
     "tray": {
-        "spacing": 8
+        "icon-size": 16,
+        "spacing": 10
     },
 
     "custom/media": {
         "exec": "~/.config/waybar/media.sh",
+        "return-type": "json",
         "interval": 2,
         "format": "{}",
-        "max-length": 50,
         "on-click": "playerctl play-pause",
         "on-scroll-up": "playerctl next",
         "on-scroll-down": "playerctl previous"
