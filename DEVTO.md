@@ -50,16 +50,19 @@ A complete, polished Hyprland desktop with:
 | Notifications | Swaync |
 | Lock screen | Hyprlock |
 | Logout menu | Wlogout |
-| Wallpaper | Hyprpaper |
+| Wallpaper | Hyprpaper + random picker script |
+| Idle daemon | Hypridle (dim → lock → suspend) |
 | Audio visualizer | Cava |
 | Clipboard | Cliphist + wl-clipboard |
-| Screenshot | Grim + Slurp |
+| Screenshot | Hyprshot |
 | Workspace overview | Hyprexpo plugin |
 | Calculator | rofi-calc (Python script) |
 | Bluetooth | Bluetoothctl |
-| Audio toggle | toggle-audio.sh (HDMI ↔ Bluetooth) |
+| Audio toggle | toggle-audio.sh (Rofi sink picker) |
+| Monitor toggle | toggle-monitor.sh (dual ↔ laptop only) |
 | Login manager | SDDM (catppuccin-mocha-blue) |
-| Font | FiraCode Nerd Font |
+| Font (terminal/UI) | FiraCode Nerd Font |
+| Font (browser/GTK) | Noto Sans (via fontconfig) |
 | Icons | Papirus-Dark |
 | Cursor | Bibata Modern Classic |
 | Color scheme | Catppuccin Mocha |
@@ -72,12 +75,12 @@ A complete, polished Hyprland desktop with:
 ```bash
 # 1. Install dependencies
 yay -S hyprland ghostty waybar rofi-wayland swaync wlogout hyprlock hyprpaper \
-       cava starship zsh-autosuggestions zsh-syntax-highlighting \
-       ttf-firacode-nerd papirus-icon-theme bibata-cursor-theme noto-fonts-emoji \
+       hypridle cava starship zsh-autosuggestions zsh-syntax-highlighting \
+       ttf-firacode-nerd papirus-icon-theme bibata-cursor-theme noto-fonts noto-fonts-emoji \
        gnome-keyring libsecret neovim nautilus \
        catppuccin-gtk-theme-mocha kvantum qt6ct \
-       cliphist wl-clipboard playerctl \
-       grim slurp socat jq \
+       cliphist wl-clipboard playerctl hyprshot \
+       socat jq brightnessctl \
        bluez bluez-utils sddm
 
 # 2. Clone dotfiles
@@ -239,7 +242,15 @@ general {
 | `Super + =` | Calculator |
 | `Super + Shift + V` | Clipboard history |
 | `Super + Shift + S` | Screenshot region → clipboard |
-| `Super + Shift + A` | Toggle audio (HDMI ↔ Bluetooth) |
+| `Print` | Screenshot active window → clipboard |
+| `Super + Print` | Screenshot full monitor → clipboard |
+| `Super + Ctrl + S` | Screenshot region → save file |
+| `Shift + Print` | Screenshot active window → save file |
+| `Ctrl + Print` | Screenshot full monitor → save file |
+| `Super + Shift + A` | Toggle audio sink (Rofi picker) |
+| `Super + Shift + M` | Toggle dual monitor ↔ laptop only |
+| `Super + Shift + W` | Randomize wallpaper |
+| `Super + Shift + -` | Move window to scratchpad |
 | `Super + Shift + E` | Power menu |
 | `Super + Shift + R` | Reload config |
 | `Super + Shift + Space` | Toggle floating |
@@ -251,6 +262,7 @@ general {
 | `Super + 1-0` | Switch workspace |
 | `Super + Shift + 1-0` | Move window to workspace |
 | `Super + ,` / `Super + .` | Focus left / right monitor |
+| `Super + Shift + ,` / `Super + Shift + .` | Move window to left / right monitor |
 
 ---
 
@@ -353,13 +365,26 @@ exec-once = wl-paste --watch cliphist store
 bind = $mainMod SHIFT, V, exec, cliphist list | rofi -dmenu -p "Clipboard" | cliphist decode | wl-copy
 ```
 
-### Screenshot
+### Screenshot (Hyprshot)
 
-`Super+Shift+S` — drag to select a region, auto-copied to clipboard:
+6 keybinds covering every use case — all powered by hyprshot:
 
 ```ini
-bind = $mainMod SHIFT, S, exec, grim -g "$(slurp)" - | wl-copy
+# Region → clipboard (most common, drag to select)
+bind = $mainMod SHIFT, S,  exec, hyprshot -m region --clipboard-only
+# Active window → clipboard
+bind = , Print,            exec, hyprshot -m window -m active --clipboard-only
+# Full monitor → clipboard
+bind = $mainMod, Print,    exec, hyprshot -m output --clipboard-only
+# Region → save file  ~/Pictures/Screenshots/
+bind = $mainMod CTRL, S,   exec, hyprshot -m region -o ~/Pictures/Screenshots/
+# Active window → save file
+bind = SHIFT, Print,       exec, hyprshot -m window -m active -o ~/Pictures/Screenshots/
+# Full monitor → save file
+bind = CTRL, Print,        exec, hyprshot -m output -o ~/Pictures/Screenshots/
 ```
+
+> **Why hyprshot instead of grim+slurp?** Inline `grim -g "$(slurp)" - | wl-copy` grabs input before the compositor is ready to release it, causing workspaces to freeze until you click. Hyprshot handles the input grab correctly.
 
 ### Workspace Overview (Hyprexpo)
 
@@ -404,7 +429,7 @@ GTK settings (`~/.config/gtk-4.0/settings.ini`):
 [Settings]
 gtk-theme-name=catppuccin-mocha-blue-standard+default
 gtk-icon-theme-name=Papirus-Dark
-gtk-font-name=FiraCode Nerd Font 11
+gtk-font-name=Noto Sans 11
 gtk-application-prefer-dark-theme=1
 ```
 
@@ -428,23 +453,17 @@ pair XX:XX:XX
 connect XX:XX:XX
 ```
 
-### Audio Toggle (HDMI ↔ Bluetooth)
+### Audio Toggle (Rofi Sink Picker)
 
-`Super + Shift + A` switches your default sink and sends a notification:
+`Super + Shift + A` — opens a Rofi menu listing all available audio sinks with icons. The current device is marked with ✓. Select any device to switch:
 
-```bash
-HDMI="alsa_output.pci-0000_03_00.1.hdmi-stereo"
-BT="bluez_output.XX:XX:XX:XX:XX:XX"
-current=$(pactl get-default-sink)
-
-if [ "$current" = "$HDMI" ]; then
-    pactl set-default-sink "$BT"
-    notify-send "Audio → Bluetooth"
-else
-    pactl set-default-sink "$HDMI"
-    notify-send "Audio → HDMI"
-fi
 ```
+󰍹 HDMI Monitor
+ USB Headset
+ Bluetooth Headphones ✓
+```
+
+The script uses `pactl list sinks` to discover devices dynamically — no hardcoded MAC addresses needed. After switching, all active audio streams are moved to the new device automatically.
 
 ### Hyprlock — Lock Screen
 
@@ -538,19 +557,82 @@ Shared color file imported by waybar, swaync, wlogout, rofi. One file, everythin
 
 > **Gotcha:** Hyprpaper does not expand `~/`. Always use full absolute paths.
 
-```ini
-preload = /home/YOUR_USERNAME/wallpapers/1.jpg
-wallpaper = eDP-1,/home/YOUR_USERNAME/wallpapers/1.jpg
-wallpaper = HDMI-A-1,/home/YOUR_USERNAME/wallpapers/1.jpg
-```
-
-Startup script with a delay (hyprpaper needs a moment to connect to Wayland socket):
+Put wallpapers in `~/wallpapers/`. A script picks one at random and applies it to both monitors:
 
 ```bash
-sleep 3
-hyprctl hyprpaper preload "/home/YOUR_USERNAME/wallpapers/1.jpg"
-hyprctl hyprpaper wallpaper "eDP-1,/home/YOUR_USERNAME/wallpapers/1.jpg"
-hyprctl hyprpaper wallpaper "HDMI-A-1,/home/YOUR_USERNAME/wallpapers/1.jpg"
+#!/bin/bash
+# ~/.config/hypr/set-wallpaper.sh
+WALLPAPER_DIR="/home/anurag/wallpapers"
+[ "$1" = "--startup" ] && sleep 3
+
+wall=$(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" \
+       -o -iname "*.png" -o -iname "*.webp" \) | shuf -n 1)
+
+hyprctl hyprpaper preload "$wall"
+hyprctl hyprpaper wallpaper "eDP-1,$wall"
+hyprctl hyprpaper wallpaper "HDMI-A-1,$wall"
+```
+
+- `exec-once = ~/.config/hypr/set-wallpaper.sh --startup` in hyprland.conf applies a random wall on boot
+- `Super + Shift + W` randomizes it live without reloading
+
+---
+
+## Idle Management (Hypridle)
+
+Auto-dims, locks, and suspends on inactivity:
+
+```ini
+general {
+    lock_cmd        = pidof hyprlock || hyprlock
+    before_sleep_cmd = loginctl lock-session
+    after_sleep_cmd  = hyprctl dispatch dpms on
+}
+
+listener { timeout = 150;  on-timeout = brightnessctl -s set 20%; on-resume = brightnessctl -r }
+listener { timeout = 300;  on-timeout = loginctl lock-session }
+listener { timeout = 330;  on-timeout = hyprctl dispatch dpms off; on-resume = hyprctl dispatch dpms on }
+listener { timeout = 1800; on-timeout = systemctl suspend }
+```
+
+2.5 min → dim screen · 5 min → lock · 5.5 min → display off · 30 min → suspend.
+
+---
+
+## Monitor Toggle
+
+`Super + Shift + M` — switches between dual monitor and laptop-only:
+
+```bash
+#!/bin/bash
+HDMI="HDMI-A-1"
+status=$(hyprctl monitors | grep -c "$HDMI")
+
+if [ "$status" -gt 0 ]; then
+    hyprctl keyword monitor "$HDMI,disabled"
+    notify-send "Monitor" "Switched to laptop only"
+else
+    hyprctl keyword monitor "$HDMI,1920x1080@60,1280x0,1.0"
+    notify-send "Monitor" "Dual monitor enabled"
+fi
+```
+
+---
+
+## Fonts
+
+FiraCode Nerd Font for all terminal/UI elements. Noto Sans for browsers and GTK apps — FiraCode looks bad in browser tabs at small sizes.
+
+```xml
+<!-- ~/.config/fontconfig/fonts.conf -->
+<alias>
+    <family>sans-serif</family>
+    <prefer><family>Noto Sans</family></prefer>
+</alias>
+<alias>
+    <family>monospace</family>
+    <prefer><family>FiraCode Nerd Font</family></prefer>
+</alias>
 ```
 
 ---
@@ -616,6 +698,12 @@ Just commit and push when you're happy with a change.
 **6. GTK4 apps ignore `gtk-theme-name`** — You must symlink the CSS directly into `~/.config/gtk-4.0/gtk.css`. The settings.ini alone isn't enough for GTK4.
 
 **7. cliphist needs wl-paste running** — Add `exec-once = wl-paste --watch cliphist store` to autostart or clipboard history won't accumulate.
+
+**8. grim+slurp freezes workspaces** — `exec, grim -g "$(slurp)" - | wl-copy` grabs input before the compositor releases it. Windows stop responding until you click. Switch to hyprshot — it handles input grab correctly.
+
+**9. FiraCode looks bad in browser tabs** — Use Noto Sans as the system sans-serif font via fontconfig. Terminal stays FiraCode, everything else gets Noto Sans.
+
+**10. waybar config vs config.jsonc** — Waybar loads `config` before `config.jsonc` if both exist. If you have an old `config` file left over from a previous dotfiles set, it'll silently shadow your new `config.jsonc` and nothing will work. Delete it: `rm ~/.config/waybar/config`.
 
 ---
 

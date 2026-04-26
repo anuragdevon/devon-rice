@@ -17,16 +17,19 @@ My personal Arch Linux + Hyprland rice. Catppuccin Mocha throughout, i3-style ke
 | File manager | Nautilus (GTK4, Catppuccin themed) |
 | Browser | Brave |
 | Launcher | Rofi (spotlight style) |
-| Status bar | Waybar |
+| Status bar | Waybar (floating pill) |
 | Notifications | Swaync |
 | Logout menu | Wlogout |
 | Lock screen | Hyprlock |
+| Idle daemon | Hypridle |
 | Login manager | SDDM (catppuccin-mocha-blue) |
-| Wallpaper | Hyprpaper |
+| Wallpaper | Hyprpaper + random picker |
+| Screenshot | Hyprshot |
 | Visualizer | Cava |
 | Clipboard | Cliphist + wl-clipboard |
 | Color scheme | Catppuccin Mocha |
-| Font | FiraCode Nerd Font |
+| Font (terminal/UI) | FiraCode Nerd Font |
+| Font (browser/GTK) | Noto Sans |
 | Icons | Papirus-Dark |
 | Cursor | Bibata Modern Classic |
 | AUR helper | yay |
@@ -41,12 +44,12 @@ git clone https://github.com/anuragdevon/devon-rice ~/devon-rice
 
 # 2. Install dependencies
 yay -S hyprland ghostty waybar rofi-wayland swaync wlogout hyprlock hyprpaper \
-       cava starship zsh-autosuggestions zsh-syntax-highlighting \
-       ttf-firacode-nerd papirus-icon-theme bibata-cursor-theme noto-fonts-emoji \
+       hypridle cava starship zsh-autosuggestions zsh-syntax-highlighting \
+       ttf-firacode-nerd papirus-icon-theme bibata-cursor-theme noto-fonts noto-fonts-emoji \
        gnome-keyring libsecret neovim nautilus \
        catppuccin-gtk-theme-mocha kvantum qt6ct \
-       cliphist wl-clipboard playerctl \
-       grim slurp socat jq \
+       cliphist wl-clipboard playerctl hyprshot \
+       socat jq brightnessctl \
        bluez bluez-utils bluetuith
 
 # 3. Run the installer
