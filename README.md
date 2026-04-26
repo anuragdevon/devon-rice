@@ -87,12 +87,18 @@ hyprctl reload
 | `Super + V` | Layout split toggle |
 | `Super + Shift + V` | Clipboard history (cliphist) |
 | `Super + Shift + S` | Screenshot region → clipboard |
+| `Print` | Screenshot active window → clipboard |
+| `Super + Print` | Screenshot full monitor → clipboard |
+| `Super + Ctrl + S` | Screenshot region → save file |
+| `Shift + Print` | Screenshot active window → save file |
+| `Ctrl + Print` | Screenshot full monitor → save file |
 | `Super + =` | Calculator (rofi-calc) |
 | `Super + B` | Bluetooth (bluetoothctl) |
 | `Super + Shift + A` | Audio sink picker (Rofi — all devices) |
 | `Super + Shift + M` | Toggle dual monitor ↔ laptop only |
 | `Super + Shift + W` | Randomize wallpaper |
 | `Super + S` | Scratchpad toggle |
+| `Super + Shift + -` | Move window to scratchpad |
 | `Super + Shift + E` | Power menu (wlogout) |
 | `Super + Shift + R` | Reload Hyprland config |
 | `Super + Shift + Space` | Toggle floating |
