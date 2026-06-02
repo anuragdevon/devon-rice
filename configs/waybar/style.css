@@ -92,6 +92,10 @@ window#waybar {
     padding: 0 10px;
 }
 
+#battery.good {
+    color: @green;
+}
+
 #battery.charging,
 #battery.plugged {
     color: @green;
